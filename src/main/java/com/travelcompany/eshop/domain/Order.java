@@ -1,7 +1,7 @@
 
-package com.travelcompany.eshop.model;
+package com.travelcompany.eshop.domain;
 
-import com.travelcompany.eshop.util.HelperMethods;
+import com.travelcompany.eshop.utility.GeneralUtility;
 import java.math.BigDecimal;
 
 /**
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * 
  * @author Grproth
  */
-public class Order {
+public class Order implements IdParser{
     
     private long id;
     private long customerId;
@@ -28,12 +28,30 @@ public class Order {
         this.paymentAmount = paymentAmount;
     }
     
+    public long getId(){
+        
+        return id;
+    }
+    
+    public long getCustomerId(){
+        
+        return customerId;
+    }
+    
+    public BigDecimal getPaymentAmount(){
+        
+        return paymentAmount;
+    }
+    
+    public static String header(){
+        
+        return "\nid,customerId,itineraryId,paymentType,paymentAmount\n\n";
+    }
+    
     @Override
     public String toString(){
         
-        
-        
         return "" + id + "," + customerId + "," + itineraryId + "," 
-                + paymentType + "," + HelperMethods.formatBigDecimal(paymentAmount);
+                + paymentType + "," + GeneralUtility.formatBigDecimal(paymentAmount);
     }
 }

@@ -1,5 +1,5 @@
 
-package com.travelcompany.eshop.model;
+package com.travelcompany.eshop.domain;
 
 /**
  * 
