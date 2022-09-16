@@ -1,10 +1,12 @@
 package com.travelcompany.eshop.domain;
 
 /**
- *
- * @author Grproth
+ *  This abstract class is a helper class that help use reduce the code written
+ *  in other parts of our project but mainly in GeneralUtility class.
+ * 
+ *  @author Grproth
  */
-public interface IdParser{
+public abstract class IdParser{
     
-    long getId();
+    public abstract long getId();
 }

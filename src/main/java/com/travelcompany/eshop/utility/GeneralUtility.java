@@ -15,12 +15,15 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
- * @author Grproth
+ *  This class is a helper class that implements helper methods for other classes.
+ *  
+ *  @author Grproth
  */
 public class GeneralUtility {
     
@@ -28,8 +31,8 @@ public class GeneralUtility {
     /**
      *  Takes a BigDecimal number and morphs it nicely to a String.
      * 
-     * @param   bigDecimal  ( the number to be morphed)
-     * @return  String      ( returns a morphed bigDecimal as a String)
+     *  @param   bigDecimal  ( the number to be morphed)
+     *  @return  String      ( returns a morphed bigDecimal as a String)
      */
     public static String formatBigDecimal( BigDecimal bigDecimal){
         
@@ -44,18 +47,18 @@ public class GeneralUtility {
     
     
     /**
-     * Checks if the email parsed is valid.
+     *  Checks if the email parsed is valid.
      * 
-     * @param   email   ( the email in question)
-     * @return  Boolean ( if the email is valid it return true, otherwise false)
-     * @throws  com.travelcompany.eshop.utility.InappropriateEmailExtension
+     *  @param   email   ( the email in question)
+     *  @return  Boolean ( if the email is valid it return true, otherwise false)
+     *  @throws  com.travelcompany.eshop.utility.InappropriateEmailExtension
      */
     public static boolean isValidEmail( String email) 
             throws InappropriateEmailExtension{
         
-        if( email.contains("@travelcompany.com")) 
+        if( email.contains("@travelcompany.com"))
             throw new InappropriateEmailExtension(
-                    "Error, the customers email extension is forbidden.");
+                "Error, the customers email extension (@travelcompany.com) is forbidden.");
         
         String regex = "^(.+)@(.+)$";
         Pattern pattern = Pattern.compile(regex);
@@ -65,32 +68,14 @@ public class GeneralUtility {
     
     
     /**
-     * Checks if the customer parsed is valid.
+     *  Checks if the address parsed is valid.
      * 
-     * @param   customer ( the customer in question)
-     * @return  Boolean  ( if the customer is valid it return true, false otherwise)
-     * @throws  com.travelcompany.eshop.utility.InappropriateEmailExtension
-     */
-    public static boolean isValidCustomer( Customer customer) 
-            throws InappropriateEmailExtension, InappropriateCustomerValueException{
-        
-        if( customer == null) 
-            throw new InappropriateCustomerValueException(
-                    "Error, the customer value is null.");    
-        
-        return isValidEmail( customer.getEmail());
-    }
-    
-    
-    /**
-     * Checks if the address parsed is valid.
-     * 
-     * @param   address ( the address in question)
-     * @return  Boolean ( if the address is valid return true, false otherwise)
+     *  @param   address ( the address in question)
+     *  @return  Boolean ( if the address is valid return true, false otherwise)
      */
     public static boolean isValidAddress( String address){
         
-        String regex = "[A-Za-z0-9'\\.\\-\\s\\,]";
+        String regex = "[\\w\\s]*\\d*";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(address);
         return matcher.matches();
@@ -98,26 +83,55 @@ public class GeneralUtility {
     
     
     /**
-     * Checks if the itinerary parsed is valid.
+     *  Checks if the customer parsed is valid.
      * 
-     * @param   itinerary   ( the itinerary in question)
-     * @return  Boolean     ( if the itinerary is valid it return true, false otherwise)
-     * @throws  com.travelcompany.eshop.utility.InappropriateAirportCodeException
-     * @throws  com.travelcompany.eshop.utility.InappropriateItineraryValueException
+     *  @param   customer ( the customer in question)
+     *  @return  Boolean  ( if the customer is valid it return true, false otherwise)
+     *  @throws  com.travelcompany.eshop.utility.InappropriateCustomerValueException
+     */
+    public static boolean isValidCustomer( Customer customer) 
+            throws InappropriateCustomerValueException{
+        
+        if( customer == null)
+            throw new InappropriateCustomerValueException(
+                    "Error, the customer value is null.");
+        
+        if( !isValidAddress( customer.getAddress()))
+            return false;
+        
+        try{
+            
+             return isValidEmail( customer.getEmail());
+        }
+        catch( InappropriateEmailExtension ex){
+        
+            System.out.println("\n");
+            Logger.getLogger( GeneralUtility.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InappropriateCustomerValueException("Inappropriate Customers email address.");
+        }
+    }
+    
+    
+    /**
+     *  Checks if the itinerary parsed is valid.
+     * 
+     *  @param   itinerary   ( the itinerary in question)
+     *  @return  Boolean     ( if the itinerary is valid it return true, false otherwise)
+     *  @throws  com.travelcompany.eshop.utility.InappropriateItineraryValueException
      */
     public static boolean isValidItinerary( Itinerary itinerary) 
-            throws InappropriateAirportCodeException, InappropriateItineraryValueException{
+            throws InappropriateItineraryValueException{
         
-        if( itinerary == null) 
+        if( itinerary == null)
             throw new InappropriateItineraryValueException(
                     "Error, the itinerary value is null.");  
         
         if( itinerary.getDepAC() == null)
-            throw new InappropriateAirportCodeException(
+            throw new InappropriateItineraryValueException(
                     "Error, the itinerary departure code is none existent.");
             
         if( itinerary.getDesAC() == null) 
-            throw new InappropriateAirportCodeException(
+            throw new InappropriateItineraryValueException(
                     "Error, the itinerary destination code is none existent.");
         
         return true;
@@ -125,30 +139,36 @@ public class GeneralUtility {
     
     
     /**
-     * Checks if the order parsed is valid.
+     *  Checks if the order parsed is valid.
      * 
-     * @param   order       ( the itinerary in question)
-     * @return  Boolean     ( if the itinerary is valid it return true, false otherwise)
-     * @throws  com.travelcompany.eshop.utility.InappropriateOrderPriceException
+     *  @param   order       ( the itinerary in question)
+     *  @return  Boolean     ( if the itinerary is valid it return true, false otherwise)
+     *  @throws  com.travelcompany.eshop.utility.InappropriateOrderValueException
      */
     public static boolean isValidOrder( Order order) 
-            throws InappropriateOrderPriceException{
+            throws InappropriateOrderValueException{
         
         if( order == null) 
             return false;    
         
         if( order.getPaymentAmount().compareTo(BigDecimal.ZERO) == -1)
-            throw new InappropriateOrderPriceException(
+            throw new InappropriateOrderValueException(
                     "Error, the orders payment amount is negative.");
             
         if( order.getPaymentAmount().compareTo(BigDecimal.ZERO) == 0)
-            throw new InappropriateOrderPriceException(
+            throw new InappropriateOrderValueException(
                     "Error, the orders payment amount is zero.");
         
         return true;
     }
     
     
+    /**
+     *  Reads   the .csv file into a list of String arrays.
+     * 
+     *  @param  fileName                ( the file name of the data red)          
+     *  @return List of String arrays.  ( the data returned in a list)
+     */
     public static List<String[]> readCsvFile( String fileName){
         
         List<String[]> list = new ArrayList<>();
@@ -176,6 +196,12 @@ public class GeneralUtility {
     }
     
     
+    /**
+     *  Writes a list of data ( customers,itinerary,order) to a specific file.
+     * 
+     *  @param list     ( the list to be written)
+     *  @param fileName ( the file name where we write the data)
+     */
     public static void writeCsvFile( final List<?> list, final String fileName){
         
         FileWriter fos = null;
@@ -212,7 +238,14 @@ public class GeneralUtility {
     }
     
     
-    public static long createNewId( final List<Order> list, final long maxValue){
+    /**
+     *  It creates a unique new id between [0, maxValue].
+     * 
+     *  @param  list        ( the list of the items to add a new id)
+     *  @param  maxValue    ( the max value to be included for the randomized algorithm)
+     *  @return The long id ( the new id to be returned)
+     */
+    public static long createNewId( final List<? extends IdParser> list, final long maxValue){
         
         Random rand = new Random();
         
@@ -240,5 +273,23 @@ public class GeneralUtility {
         }while( true);
         
         return newId;
+    }
+    
+    /**
+     *  Takes as input a list and checks if the id exists within the list.
+     * 
+     * @param list  ( the list to be checked)
+     * @param id    ( the id to be checked)
+     * @return      ( true if the id exists, false otherwise)
+     */
+    public static boolean isValidId( List<? extends IdParser> list, long id){
+        
+        for( var item : list){
+            
+            if( item.getId() == id)
+                return true;
+        }
+        
+        return false;
     }
 }

@@ -1,8 +1,10 @@
 package com.travelcompany.eshop.utility;
 
 /**
- *
- * @author Grproth
+ *  This class is a custom exception of our application.
+ *  This is called when the email is has inappropriate value.
+ * 
+ *  @author Grproth
  */
 public class InappropriateEmailExtension extends Exception {
     

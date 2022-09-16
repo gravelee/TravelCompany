@@ -5,18 +5,19 @@ import com.travelcompany.eshop.utility.GeneralUtility;
 import java.math.BigDecimal;
 
 /**
- *
- * A class that represent the different orders and their info.
+ *  A class that represent the different orders and their info.
+ *  We do extend from IdParser in order to reduce the number of methods called
+ *  within GeneralUtility class.
  * 
- * @author Grproth
+ *  @author Grproth
  */
-public class Order implements IdParser{
+public class Order extends IdParser{
     
-    private long id;
-    private long customerId;
-    private long itineraryId;
-    private PaymentType paymentType;
-    private BigDecimal paymentAmount;
+    private final long id;
+    private final long customerId;
+    private final long itineraryId;
+    private final PaymentType paymentType;
+    private final BigDecimal paymentAmount;
     
     public Order(long id, long customerId, long itineraryId, 
             PaymentType paymentType, BigDecimal paymentAmount){
@@ -28,6 +29,10 @@ public class Order implements IdParser{
         this.paymentAmount = paymentAmount;
     }
     
+    /*
+        We did the override cause we inherit that method from IdParser abstruct class.
+    */
+    @Override
     public long getId(){
         
         return id;
@@ -45,7 +50,7 @@ public class Order implements IdParser{
     
     public static String header(){
         
-        return "\nid,customerId,itineraryId,paymentType,paymentAmount\n\n";
+        return "\n\nid,customerId,itineraryId,paymentType,paymentAmount\n\n";
     }
     
     @Override

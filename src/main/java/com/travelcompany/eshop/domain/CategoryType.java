@@ -1,11 +1,9 @@
-
 package com.travelcompany.eshop.domain;
 
 /**
+ *  An enum helper type that represents the different customer types.
  * 
- * An enum helper type that represents the different customer types.
- * 
- * @author Grproth
+ *  @author Grproth
  */
 public enum CategoryType {
     

@@ -2,20 +2,17 @@ package com.travelcompany.eshop.repository.impl;
 
 import com.travelcompany.eshop.domain.Order;
 import com.travelcompany.eshop.repository.OrdersRepository;
-import com.travelcompany.eshop.utility.GeneralUtility;
-import com.travelcompany.eshop.utility.InappropriateOrderPriceException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
- * @author Grproth
+ *  This is an implementation of the OrdersRepository interface.
+ * 
+ *  @author Grproth
  */
 public class OrdersRepositoryImpl implements OrdersRepository{
     
-    private List<Order> orders = new ArrayList<>();
+    private final List<Order> orders = new ArrayList<>();
     
     
     /**
@@ -31,18 +28,6 @@ public class OrdersRepositoryImpl implements OrdersRepository{
             
             if( order.getId() == newOrder.getId())
                 return false;
-        }
-        
-        try {
-            
-            if( !GeneralUtility.isValidOrder(newOrder))
-                return false;
-            
-        } 
-        catch ( InappropriateOrderPriceException ex) {
-            
-            Logger.getLogger( OrdersRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         }
         
         orders.add(newOrder);

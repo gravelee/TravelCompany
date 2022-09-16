@@ -5,8 +5,11 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- *
- * @author Grproth
+ *  This is the ItinerariesRepository interface, here we have all the methods that
+ *  a Itineraries Repository implementation needs to implement in order to have
+ *  the appropriate logic.
+ * 
+ *  @author Grproth
  */
 public interface ItinerariesRepository {
     

@@ -2,7 +2,6 @@ package com.travelcompany.eshop.service.impl;
 
 import com.travelcompany.eshop.domain.CategoryType;
 import com.travelcompany.eshop.domain.Customer;
-import com.travelcompany.eshop.domain.IdParser;
 import com.travelcompany.eshop.domain.Itinerary;
 import com.travelcompany.eshop.domain.Order;
 import com.travelcompany.eshop.domain.PaymentType;
@@ -14,11 +13,9 @@ import com.travelcompany.eshop.repository.impl.ItinerariesRepositoryImpl;
 import com.travelcompany.eshop.repository.impl.OrdersRepositoryImpl;
 import com.travelcompany.eshop.service.TravelCompanyService;
 import com.travelcompany.eshop.utility.GeneralUtility;
-import com.travelcompany.eshop.utility.InappropriateAirportCodeException;
 import com.travelcompany.eshop.utility.InappropriateCustomerValueException;
-import com.travelcompany.eshop.utility.InappropriateEmailExtension;
 import com.travelcompany.eshop.utility.InappropriateItineraryValueException;
-import com.travelcompany.eshop.utility.InappropriateOrderPriceException;
+import com.travelcompany.eshop.utility.InappropriateOrderValueException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,14 +26,19 @@ import java.util.logging.Logger;
 import org.javatuples.Pair;
 
 /**
- *
- * @author Grproth
+ *  This is an implementation of the TravelCompanyService interface.
+ * 
+ *  @author Grproth
  */
 public class TravelCompanyServiceImpl implements TravelCompanyService{
+    
+    //  The file names within the project file of the .csv data files to be red.
     
     private static final String CUSTOMERS_FILE_NAME = "customers.csv";
     private static final String ITINERARIES_FILE_NAME = "itineraries.csv";
     private static final String ORDERS_FILE_NAME = "orders.csv";
+    
+    //  The different data lists of our program ( Customer, Itinerary, Order).
     
     private final CustomersRepository customersRepository 
             = new CustomersRepositoryImpl();
@@ -48,6 +50,15 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
             = new OrdersRepositoryImpl();
     
     
+    /**
+     *  It reads the appropriate data and implements the business logic about 
+     *  the discounts.
+     *  
+     *  @param  categoryType    ( the category type of the customer)
+     *  @param  paymentType     ( the payment type of the order)
+     *  @param  price           ( the original price of the itinerary)
+     *  @return BigDecimal      ( the processed price to be payed by the customer)
+     */
     private BigDecimal discount( final CategoryType categoryType, 
         final PaymentType paymentType, final BigDecimal price){
         
@@ -68,6 +79,10 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
     }
     
     
+    /**
+     *  We load the data of a .csv file and then we write them into the customer list.
+     *  We also check if the customer to be added is valid based of business logic.
+     */
     @Override
     public void loadCustomersData(){
         
@@ -93,11 +108,24 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
             Customer customer = new Customer(cId,name,email,
                     address,nationality,categoryType);
 
-            customersRepository.addCustomer(customer);
+            try{
+            
+                if( GeneralUtility.isValidCustomer(customer))
+                    customersRepository.addCustomer(customer);
+            }
+            catch( InappropriateCustomerValueException ex){
+                
+                System.out.println("\n");
+                Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
     
+    /**
+     *  We load the data of a .csv file and then we write them into the itinerary list.
+     *  We also check if the itinerary to be added is valid based of business logic.
+     */
     @Override
     public void loadItinerariesData(){
         
@@ -120,11 +148,24 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
             Itinerary itinerary = new Itinerary(iId,depAC,desAC,
                     depDate,depTime,airline,price);
 
-            itinerariesRepository.addItinerary(itinerary);
+            try{
+            
+                if( GeneralUtility.isValidItinerary(itinerary))
+                    itinerariesRepository.addItinerary(itinerary);
+            }
+            catch( InappropriateItineraryValueException ex){
+                
+                System.out.println("\n");
+                Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
     
+    /**
+     *  We load the data of a .csv file and then we write them into the order list.
+     *  We also check if the order to be added is valid based of business logic.
+     */
     @Override
     public void loadOrdersData(){
         
@@ -145,14 +186,33 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
                     :PaymentType.CREDIT_CARD;
             paymentAmount = new BigDecimal(temp[4]);
 
+            if( !GeneralUtility.isValidId( customersRepository.readCustomers(), customerId))
+                continue;
+            
+            if( !GeneralUtility.isValidId( itinerariesRepository.readItineraries(), itineraryId))
+                continue;
+            
             Order order = new Order(oId,customerId,itineraryId,
                     paymentType,paymentAmount);
-
-            ordersRepository.addOrder(order);
+            
+            try{
+            
+                if( GeneralUtility.isValidOrder(order))
+                    ordersRepository.addOrder(order);
+            }
+            catch( InappropriateOrderValueException ex){
+                
+                System.out.println("\n");
+                Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
     
+    /**
+     *  We save the data of a customer into a .csv file.
+     *  The data does not need validity checking.
+     */
     @Override
     public void saveCustomersData(){
         
@@ -161,6 +221,10 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
     }
     
     
+    /**
+     *  We save the data of an itinerary into a .csv file.
+     *  The data does not need validity checking.
+     */
     @Override
     public void saveItinerariesData(){
         
@@ -169,6 +233,10 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
     }
     
     
+    /**
+     *  We save the data of an order into a .csv file.
+     *  The data does not need validity checking.
+     */
     @Override
     public void saveOrdersData(){
         
@@ -177,6 +245,17 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
     }
     
     
+    /**
+     *  We create a new order to be added into our order list and we also check
+     *  the validity of the order and if the ids of the customer and the 
+     *  itinerary exists already.
+     * 
+     *  @param  customerId  ( the customer id to be checked)
+     *  @param  itineraryId ( the itinerary id to be checked)
+     *  @param  paymentType ( the payment type of the order)
+     *  @return             ( true if the order has been created and added 
+     *                          to the list, false otherwise)
+     */
     @Override
     public boolean createNewOrder( long customerId, 
             long itineraryId, PaymentType paymentType){
@@ -188,9 +267,10 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
 
             GeneralUtility.isValidCustomer(customer);
 
-        } catch (InappropriateEmailExtension | InappropriateCustomerValueException ex) {
-
-            Logger.getLogger(TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch ( InappropriateCustomerValueException ex) {
+            
+            System.out.println("\n");
+            Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
         
@@ -198,14 +278,20 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
             
             GeneralUtility.isValidItinerary(itinerary);
             
-        } catch (InappropriateAirportCodeException | InappropriateItineraryValueException ex) {
+        } catch ( InappropriateItineraryValueException ex) {
             
-            Logger.getLogger(TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("\n");
+            Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
         
-        long newId = GeneralUtility.createNewId( 
-                ordersRepository.readOrders(), Long.MAX_VALUE);
+        long newId; 
+        
+        // could put Long.MAX_VALUE for the second arg but for the sake of
+        // our application I will put a smaller number (100) to look better.
+        newId = GeneralUtility.createNewId( 
+                ordersRepository.readOrders(), 100); 
+        
         
         BigDecimal discountedPrice = discount( customer.getCategory(), 
             paymentType, itinerary.getPrice());
@@ -221,29 +307,51 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
                 return true;
             }
             
-        } catch (InappropriateOrderPriceException ex) {
+        } catch (InappropriateOrderValueException ex) {
             
-            Logger.getLogger(TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("\n");
+            Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return false;
     }
     
     
+    /**
+     *  Displays all the orders from the list.
+     */
     @Override
     public void displayAllOrdersWithCosts(){
         
-        Order.header();
+        System.out.println(Order.header());
         
         for( Order order : ordersRepository.readOrders())
-            order.toString();
+            System.out.println(order.toString());
     }
     
     
+    /**
+     *  Displays all itineraries that pass the filter.
+     *  Specifically if the departure or destination strings are null they 
+     *  do not participate to the filtering algorithm. If one of them is not
+     *  null it participates and if both of them are not null they participate
+     *  both.
+     * 
+     *  The algorithm filters all the data based on the first string ( if not null)
+     *  and then filters the remaining data for the second string ( if not null).
+     * 
+     *  Basically we check if the itineraries have the specific departure and 
+     *  adds the itineraries to the filter list itineraries. Then we check if 
+     *  the itineraries have the specific destination and then prints them to
+     *  the user.
+     * 
+     *  @param departure     ( the first string to be checked)
+     *  @param destination   ( the second string to be checked)
+     */
     @Override
     public void displaySpecificItineraries( String departure, String destination){  // either of these or both can be null.
         
-        Itinerary.header();
+        System.out.println(Itinerary.header());
         
         List<Itinerary> itineraries = new ArrayList<>();
         
@@ -260,13 +368,13 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
                 for( Itinerary itinerary : itineraries){
 
                     if( itinerary.getDesAC().equals(destination))
-                        itinerary.toString();
+                        System.out.println(itinerary.toString());
                 }
             }
             else{
              
                 for( Itinerary itinerary : itineraries)
-                    itinerary.toString();
+                    System.out.println(itinerary.toString());
             }
         }
         else if( destination != null){
@@ -274,21 +382,41 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
             for( Itinerary itinerary : itinerariesRepository.readItineraries()){
 
                 if( itinerary.getDesAC().equals(destination))
-                    itinerary.toString();
+                    System.out.println(itinerary.toString());
             }
         }
         else{   // prints everything cause we did not add restrictions.
             
             for( Itinerary itinerary : itinerariesRepository.readItineraries())
-                itinerary.toString();
+                System.out.println(itinerary.toString());
         }
     }
     
     
+    /**
+     *  Displays all customers that pass the filter.
+     *  Specifically if the fromTicketNumber number is zero or fromCost big 
+     *  decimal is zero or null they do not participate to the filtering algorithm. 
+     *  If one of them is not zero or null it participates and if both of them are 
+     *  not zeros or null they participate both.
+     * 
+     *  The algorithm filters all the data based on the integer ( if not zero)
+     *  and then filters the remaining data based on the big decimal 
+     *  ( if not zero or null).
+     * 
+     *  We also use an internal data structure of a map to do the job.
+     *  We also use lambda expressions to do the job.
+     * 
+     *  Basically we check if the customer has number of tickets equals or more
+     *  than the fromTicketNumber int and we also check if the customer has equals 
+     *  or more than the fromCost number of the sum of the costs of the specific 
+     *  customers orders. In the end we prints the appropriate data.
+     * 
+     *  @param fromTicketNumber 
+     *  @param fromCost         
+     */
     @Override
     public void displayCustomers( int fromTicketNumber, BigDecimal fromCost){   // the numbers can be 0 (0.0) or null for BigDecimal.
-        
-        Customer.header();
         
         Map<Long,Pair<Integer,BigDecimal>> ordersPerCustomerIdWithTotalAmount = new HashMap<>();
         
@@ -313,6 +441,9 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
             }
         }
         
+//        System.out.println( "\n" + ordersPerCustomerIdWithTotalAmount.size() 
+//              + "\n" + ordersPerCustomerIdWithTotalAmount.toString() + "\n");
+        
         if( fromTicketNumber != 0){
         
             if( fromCost != null && fromCost.compareTo( BigDecimal.ZERO) == 1){
@@ -326,7 +457,7 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
                     Customer customer = customersRepository.readCustomer(key);
                     
                     if( customer != null)
-                        customer.toString();
+                        System.out.println(customer.toString());
                 }});
             }
             else{
@@ -338,7 +469,7 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
                     Customer customer = customersRepository.readCustomer(key);
                     
                     if( customer != null)
-                        customer.toString();
+                        System.out.println(customer.toString());
                 }});
             }
         }
@@ -352,16 +483,25 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
                 Customer customer = customersRepository.readCustomer(key);
                     
                 if( customer != null)
-                    customer.toString();
+                    System.out.println(customer.toString());
             }});
+        }
+        else{
+            
+            for( Customer customer : customersRepository.readCustomers())
+                System.out.println(customer.toString());
         }
     }
     
     
+    /**
+     *  We check if the customers have done any orders and if not then we 
+     *  print them.
+     */
     @Override
     public void displayAllCustomersWithoutOrders(){
         
-        Customer.header();
+        System.out.println(Customer.header());
         
         for( Customer customer : customersRepository.readCustomers()){
             
@@ -374,7 +514,7 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
             }
             
             if( !hasOrdered)
-                customer.toString();
+                System.out.println(customer.toString());
         }
     }
 }

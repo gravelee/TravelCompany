@@ -4,16 +4,13 @@ import com.travelcompany.eshop.domain.CategoryType;
 import com.travelcompany.eshop.domain.Customer;
 import com.travelcompany.eshop.repository.CustomersRepository;
 import com.travelcompany.eshop.utility.GeneralUtility;
-import com.travelcompany.eshop.utility.InappropriateCustomerValueException;
-import com.travelcompany.eshop.utility.InappropriateEmailExtension;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
- * @author Grproth
+ *  This is an implementation of the CustomersRepository interface.
+ * 
+ *  @author Grproth
  */
 public class CustomersRepositoryImpl implements CustomersRepository {
     
@@ -33,18 +30,6 @@ public class CustomersRepositoryImpl implements CustomersRepository {
             
             if( customer.getId() == newCustomer.getId())
                 return false;
-        }
-        
-        try {
-            
-            if( !GeneralUtility.isValidCustomer(newCustomer))
-                return false;
-            
-        } 
-        catch ( InappropriateCustomerValueException | InappropriateEmailExtension ex) {
-            
-            Logger.getLogger( CustomersRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         }
         
         customers.add(newCustomer);
@@ -143,18 +128,6 @@ public class CustomersRepositoryImpl implements CustomersRepository {
             if ( customer.getEmail() != null 
                 && customer.getEmail().equals(newEmail))
                    return false;
-        }
-        
-        try {
-            
-            if( !GeneralUtility.isValidEmail(newEmail))
-                return false;
-            
-        } 
-        catch ( InappropriateEmailExtension ex) {
-            
-            Logger.getLogger(CustomersRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         }
         
         theCustomer.setEmail(newEmail);

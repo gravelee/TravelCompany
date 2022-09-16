@@ -1,12 +1,14 @@
 package com.travelcompany.eshop.service;
 
-import com.travelcompany.eshop.domain.Order;
 import com.travelcompany.eshop.domain.PaymentType;
 import java.math.BigDecimal;
 
 /**
- *
- * @author Grproth
+ *  This is the TravelCompanyService interface, here we have all the methods that
+ *  a TravelCompanyService implementation needs to implement in order to have
+ *  the appropriate logic. We update the logic if we need more functionality.
+ * 
+ *  @author Grproth
  */
 public interface TravelCompanyService {
     

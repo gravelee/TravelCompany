@@ -2,18 +2,14 @@ package com.travelcompany.eshop.repository.impl;
 
 import com.travelcompany.eshop.domain.Itinerary;
 import com.travelcompany.eshop.repository.ItinerariesRepository;
-import com.travelcompany.eshop.utility.GeneralUtility;
-import com.travelcompany.eshop.utility.InappropriateAirportCodeException;
-import com.travelcompany.eshop.utility.InappropriateItineraryValueException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
- * @author Grproth
+ *  This is an implementation of the ItinerariesRepository interface.
+ * 
+ *  @author Grproth
  */
 public class ItinerariesRepositoryImpl implements ItinerariesRepository{
     
@@ -33,18 +29,6 @@ public class ItinerariesRepositoryImpl implements ItinerariesRepository{
             
             if( itinerary.getId() == newItinerary.getId())
                 return false;
-        }
-        
-        try {
-            
-            if( !GeneralUtility.isValidItinerary(newItinerary))
-                return false;
-            
-        } 
-        catch ( InappropriateItineraryValueException | InappropriateAirportCodeException ex) {
-            
-            Logger.getLogger( ItinerariesRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         }
         
         itineraries.add(newItinerary);

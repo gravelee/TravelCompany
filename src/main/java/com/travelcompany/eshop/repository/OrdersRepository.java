@@ -4,8 +4,11 @@ import com.travelcompany.eshop.domain.Order;
 import java.util.List;
 
 /**
- *
- * @author Grproth
+ *  This is the OrderRepository interface, here we have all the methods that
+ *  a OrderRepository implementation needs to implement in order to have
+ *  the appropriate logic.
+ * 
+ *  @author Grproth
  */
 public interface OrdersRepository {
     

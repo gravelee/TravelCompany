@@ -1,11 +1,9 @@
-
 package com.travelcompany.eshop.domain;
 
 /**
+ *  An enum helper type that represents the different payment types.
  * 
- * An enum helper type that represents the different payment types.
- * 
- * @author Grproth
+ *  @author Grproth
  */
 public enum PaymentType {
     

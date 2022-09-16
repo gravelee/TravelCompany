@@ -5,8 +5,11 @@ import com.travelcompany.eshop.domain.Customer;
 import java.util.List;
 
 /**
- *
- * @author Grproth
+ *  This is the CustomerRepository interface, here we have all the methods that
+ *  a CustomerRepository implementation needs to implement in order to have
+ *  the appropriate logic.
+ * 
+ *  @author Grproth
  */
 public interface CustomersRepository {
     

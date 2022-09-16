@@ -1,20 +1,20 @@
-
 package com.travelcompany.eshop.domain;
 
 import com.travelcompany.eshop.utility.GeneralUtility;
 import java.math.BigDecimal;
 
 /**
- *
- * A class that represent the different itineraries and their info.
+ *  A class that represent the different itineraries and their info.
+ *  We do extend from IdParser in order to reduce the number of methods called
+ *  within GeneralUtility class.
  * 
- * @author Grproth
+ *  @author Grproth
  */
-public class Itinerary implements IdParser{
+public class Itinerary extends IdParser{
     
-    private long id;
-    private String depAC;
-    private String desAC;
+    private final long id;
+    private final String depAC;
+    private final String desAC;
     private String depDate; // can change to one of the java date & time classes.
     private String depTime; // can change to one of the java date & time classes.
     private String airline;
@@ -36,6 +36,10 @@ public class Itinerary implements IdParser{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    /*
+        We did the override cause we inherit that method from IdParser abstruct class.
+    */
+    @Override
     public long getId() {
         
         return id;
@@ -90,7 +94,7 @@ public class Itinerary implements IdParser{
     
     public static String header(){
         
-        return "\nid,depAC,decAC,depDate,depTime,airline,price\n\n";
+        return "\n\nid,depAC,decAC,depDate,depTime,airline,price\n\n";
     }
     
     @Override
