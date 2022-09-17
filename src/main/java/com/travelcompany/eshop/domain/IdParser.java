@@ -6,7 +6,7 @@ package com.travelcompany.eshop.domain;
  * 
  *  @author Grproth
  */
-public abstract class IdParser{
+public abstract class IdParser {
     
     public abstract long getId();
 }

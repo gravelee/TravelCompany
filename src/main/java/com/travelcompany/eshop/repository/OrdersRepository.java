@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface OrdersRepository {
     
-    boolean addOrder( Order order);
-    boolean deleteOrder( long orderId);
+    boolean addOrder( final Order order);
+    boolean deleteOrder( final long orderId);
     List<Order> readOrders();
-    Order readOrder( long orderId);
+    Order readOrder( final long orderId);
 }

@@ -1,4 +1,3 @@
-
 package com.travelcompany.eshop.domain;
 
 import com.travelcompany.eshop.utility.GeneralUtility;
@@ -11,7 +10,7 @@ import java.math.BigDecimal;
  * 
  *  @author Grproth
  */
-public class Order extends IdParser{
+public class Order extends IdParser {
     
     private final long id;
     private final long customerId;
@@ -19,8 +18,8 @@ public class Order extends IdParser{
     private final PaymentType paymentType;
     private final BigDecimal paymentAmount;
     
-    public Order(long id, long customerId, long itineraryId, 
-            PaymentType paymentType, BigDecimal paymentAmount){
+    public Order( final long id, final long customerId, final long itineraryId, 
+            final PaymentType paymentType, final BigDecimal paymentAmount) {
         
         this.id = id;
         this.customerId = customerId;
@@ -30,33 +29,33 @@ public class Order extends IdParser{
     }
     
     /*
-        We did the override cause we inherit that method from IdParser abstruct class.
+        We did override cause we inherit that method IdParser abstruct class.
     */
     @Override
-    public long getId(){
+    public final long getId() {
         
         return id;
     }
     
-    public long getCustomerId(){
+    public final long getCustomerId() {
         
         return customerId;
     }
     
-    public BigDecimal getPaymentAmount(){
+    public final BigDecimal getPaymentAmount() {
         
         return paymentAmount;
     }
     
-    public static String header(){
+    public static final String header() {
         
         return "\n\nid,customerId,itineraryId,paymentType,paymentAmount\n\n";
     }
     
     @Override
-    public String toString(){
+    public final String toString() {
         
         return "" + id + "," + customerId + "," + itineraryId + "," 
-                + paymentType + "," + GeneralUtility.formatBigDecimal(paymentAmount);
+           + paymentType + "," + GeneralUtility.formatBigDecimal(paymentAmount);
     }
 }

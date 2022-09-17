@@ -10,18 +10,19 @@ import java.math.BigDecimal;
  * 
  *  @author Grproth
  */
-public class Itinerary extends IdParser{
+public class Itinerary extends IdParser {
     
     private final long id;
     private final String depAC;
     private final String desAC;
-    private String depDate; // can change to one of the java date & time classes.
-    private String depTime; // can change to one of the java date & time classes.
+    private String depDate; // can change to one of java date & time classes.
+    private String depTime; // can change to one of java date & time classes.
     private String airline;
     private BigDecimal price;
 
-    public Itinerary(long id, String depAC, String desAC, String depDate, 
-            String depTime, String airline, BigDecimal price) {
+    public Itinerary( final long id, final String depAC, final String desAC, 
+            final String depDate, final String depTime, final String airline, 
+            final BigDecimal price) {
         
         this.id = id;
         this.depAC = depAC;
@@ -32,73 +33,74 @@ public class Itinerary extends IdParser{
         this.price = price;
     }
 
-    public Itinerary(long createNewId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Itinerary( final long createNewId) {
+        
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /*
-        We did the override cause we inherit that method from IdParser abstruct class.
+        We override cause we inherit the method from IdParser abstruct class.
     */
     @Override
-    public long getId() {
+    public final long getId() {
         
         return id;
     }
 
-    public String getDepAC() {
+    public final String getDepAC() {
         
         return depAC;
     }
     
-    public String getDesAC() {
+    public final String getDesAC() {
         
         return desAC;
     }
     
-    public String getDepDate() {
+    public final String getDepDate() {
         
         return depDate;
     }
     
-    public String getDepTime() {
+    public final String getDepTime() {
         return depTime;
     }
     
-    public String getAirline() {
+    public final String getAirline() {
         return airline;
     }
     
-    public BigDecimal getPrice() {
+    public final BigDecimal getPrice() {
         return price;
     }
 
-    public void setDepDate(String depDate) {
+    public final void setDepDate( final String depDate) {
         
         this.depDate = depDate;
     }
 
-    public void setDepTime(String depTime) {
+    public final void setDepTime( final String depTime) {
         
         this.depTime = depTime;
     }
 
-    public void setAirline(String airline) {
+    public final void setAirline( final String airline) {
         
         this.airline = airline;
     }
 
-    public void setPrice(BigDecimal price) {
+    public final void setPrice( final BigDecimal price) {
         
         this.price = price;
     }
     
-    public static String header(){
+    public static final String header() {
         
         return "\n\nid,depAC,decAC,depDate,depTime,airline,price\n\n";
     }
     
     @Override
-    public String toString() {
+    public final String toString() {
         
         return "" + id + "," + depAC + "," + desAC + "," + depDate + "," 
                 + depTime + "," + airline + "," 

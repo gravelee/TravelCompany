@@ -7,9 +7,9 @@ package com.travelcompany.eshop.utility;
  * 
  * @author Grproth
  */
-public class InappropriateOrderValueException extends Exception{
+public class InappropriateOrderValueException extends Exception {
     
-    public InappropriateOrderValueException( String errorMessage) {
+    public InappropriateOrderValueException( final String errorMessage) {
         
         super(errorMessage);
     }

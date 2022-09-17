@@ -12,12 +12,14 @@ public enum PaymentType {
     
     private final String name;
     
-    private PaymentType(String name){
+    private PaymentType( String name) {
+        
         this.name = name;
     }
     
     @Override
-    public String toString(){
+    public final String toString() {
+        
         return name;
     }
 }

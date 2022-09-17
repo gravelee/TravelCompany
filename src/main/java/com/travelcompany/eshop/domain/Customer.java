@@ -8,7 +8,7 @@ package com.travelcompany.eshop.domain;
  * 
  *  @author Grproth
  */
-public class Customer extends IdParser{
+public class Customer extends IdParser {
 
     private final long id;
     private String name;
@@ -20,7 +20,7 @@ public class Customer extends IdParser{
     /*
         Here we make our nationality array into a stirng.
     */
-    private String nationalityToString(){
+    private String nationalityToString() {
         
         String temp = "";
         for( String str : nationality) 
@@ -29,8 +29,9 @@ public class Customer extends IdParser{
         return temp;
     }
     
-    public Customer(long id, String name, String email, String address, 
-            String[] nationality, CategoryType categoryType) {
+    public Customer( final long id, final String name, final String email, 
+            final String address, final String[] nationality, 
+            final CategoryType categoryType) {
         
         this.id = id;
         this.name = name;
@@ -41,71 +42,71 @@ public class Customer extends IdParser{
     }
     
     /*
-        We did the override cause we inherit that method from IdParser abstruct class.
+        We override cause we inherit that method from IdParser abstruct class.
     */
     @Override
-    public long getId(){
+    public final long getId() {
         
         return id;
     }
     
-    public String getName(){
+    public final String getName() {
         
         return name;
     }
     
-    public String getEmail(){
+    public final String getEmail() {
         
         return email;
     }
     
-    public String getAddress(){
+    public final String getAddress() {
         
         return address;
     }
     
-    public String[] getNationality(){
+    public final String[] getNationality() {
         
         return nationality;
     }
     
-    public CategoryType getCategory(){
+    public final CategoryType getCategory() {
         
         return categoryType;
     }
     
-    public void setName( String name){
+    public final void setName( final String name) {
     
         this.name = name;
     }
     
-    public void setEmail( String email){
+    public final void setEmail( final String email) {
         
         this.email = email;
     }
     
-    public void setAddress( String address){
+    public final void setAddress( final String address) {
         
         this.address = address;
     }
     
-    public void setNationality( String[] nationality){
+    public final void setNationality( final String[] nationality) {
         
         this.nationality = nationality;
     }
     
-    public void setCategoryType( CategoryType categoryType){
+    public final void setCategoryType( final CategoryType categoryType) {
         
         this.categoryType = categoryType;
     }
     
-    public static String header(){
+    public static final String header() {
         
         return "\n\nid,name,email,address,nationality,cateforyType\n\n";
     }
     
     @Override
-    public String toString(){
+    public final String toString() {
         
         return "" + id + "," + name + "," + email + "," + address + ","
             + nationalityToString() + "," + categoryType;

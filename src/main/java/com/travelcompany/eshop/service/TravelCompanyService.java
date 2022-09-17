@@ -4,7 +4,7 @@ import com.travelcompany.eshop.domain.PaymentType;
 import java.math.BigDecimal;
 
 /**
- *  This is the TravelCompanyService interface, here we have all the methods that
+ *  This is TravelCompanyService interface, here we have all the methods that
  *  a TravelCompanyService implementation needs to implement in order to have
  *  the appropriate logic. We update the logic if we need more functionality.
  * 
@@ -20,10 +20,14 @@ public interface TravelCompanyService {
     void saveItinerariesData();
     void saveOrdersData();
     
-    boolean createNewOrder( long customerId, long itineraryId, PaymentType paymentType);
+    boolean createNewOrder( final long customerId, final long itineraryId, 
+            final PaymentType paymentType);
     
     void displayAllOrdersWithCosts();
-    void displaySpecificItineraries( String departure, String destination); // either of these can be null.
-    void displayCustomers( int fromTicketNumber, BigDecimal fromCost);  // the numbers can be 0 (0.0) but not null (BigDecimal).
+    void displaySpecificItineraries( final String departure, 
+            final String destination); // either of these can be null.
+    void displayCustomers( final int fromTicketNumber, 
+            final BigDecimal fromCost);  
+            // the numbers can be 0 (0.0) but not null (BigDecimal).
     void displayAllCustomersWithoutOrders();
 }

@@ -21,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *  This class is a helper class that implements helper methods for other classes.
+ *  This class, a helper class that implements helper methods for other classes.
  *  
  *  @author Grproth
  */
@@ -34,7 +34,7 @@ public class GeneralUtility {
      *  @param   bigDecimal  ( the number to be morphed)
      *  @return  String      ( returns a morphed bigDecimal as a String)
      */
-    public static String formatBigDecimal( BigDecimal bigDecimal){
+    public static String formatBigDecimal( final BigDecimal bigDecimal) {
         
         DecimalFormat df = new DecimalFormat();
         
@@ -50,15 +50,16 @@ public class GeneralUtility {
      *  Checks if the email parsed is valid.
      * 
      *  @param   email   ( the email in question)
-     *  @return  Boolean ( if the email is valid it return true, otherwise false)
+     *  @return  Boolean ( if email is valid it return true, otherwise false)
      *  @throws  com.travelcompany.eshop.utility.InappropriateEmailExtension
      */
-    public static boolean isValidEmail( String email) 
-            throws InappropriateEmailExtension{
+    public static boolean isValidEmail( final String email) 
+            throws InappropriateEmailExtension {
         
         if( email.contains("@travelcompany.com"))
             throw new InappropriateEmailExtension(
-                "Error, the customers email extension (@travelcompany.com) is forbidden.");
+                "Error, the customers email extension "
+                        + "( @travelcompany.com) is forbidden.");
         
         String regex = "^(.+)@(.+)$";
         Pattern pattern = Pattern.compile(regex);
@@ -73,7 +74,7 @@ public class GeneralUtility {
      *  @param   address ( the address in question)
      *  @return  Boolean ( if the address is valid return true, false otherwise)
      */
-    public static boolean isValidAddress( String address){
+    public static boolean isValidAddress( final String address) {
         
         String regex = "[\\w\\s]*\\d*";
         Pattern pattern = Pattern.compile(regex);
@@ -86,11 +87,12 @@ public class GeneralUtility {
      *  Checks if the customer parsed is valid.
      * 
      *  @param   customer ( the customer in question)
-     *  @return  Boolean  ( if the customer is valid it return true, false otherwise)
-     *  @throws  com.travelcompany.eshop.utility.InappropriateCustomerValueException
+     *  @return  Boolean  ( if customer is valid return true, false otherwise)
+     *  @throws  
+     *      com.travelcompany.eshop.utility.InappropriateCustomerValueException
      */
-    public static boolean isValidCustomer( Customer customer) 
-            throws InappropriateCustomerValueException{
+    public static boolean isValidCustomer( final Customer customer) 
+            throws InappropriateCustomerValueException {
         
         if( customer == null)
             throw new InappropriateCustomerValueException(
@@ -103,11 +105,13 @@ public class GeneralUtility {
             
              return isValidEmail( customer.getEmail());
         }
-        catch( InappropriateEmailExtension ex){
+        catch( InappropriateEmailExtension ex) {
         
             System.out.println("\n");
-            Logger.getLogger( GeneralUtility.class.getName()).log(Level.SEVERE, null, ex);
-            throw new InappropriateCustomerValueException("Inappropriate Customers email address.");
+            Logger.getLogger( GeneralUtility.class.getName()).log( 
+                    Level.SEVERE, null, ex);
+            throw new InappropriateCustomerValueException(
+                    "Inappropriate Customers email address.");
         }
     }
     
@@ -116,11 +120,12 @@ public class GeneralUtility {
      *  Checks if the itinerary parsed is valid.
      * 
      *  @param   itinerary   ( the itinerary in question)
-     *  @return  Boolean     ( if the itinerary is valid it return true, false otherwise)
-     *  @throws  com.travelcompany.eshop.utility.InappropriateItineraryValueException
+     *  @return  Boolean     ( if itinerary valid return true, false otherwise)
+     *  @throws  
+     *      com.travelcompany.eshop.utility.InappropriateItineraryValueException
      */
-    public static boolean isValidItinerary( Itinerary itinerary) 
-            throws InappropriateItineraryValueException{
+    public static boolean isValidItinerary( final Itinerary itinerary) 
+            throws InappropriateItineraryValueException {
         
         if( itinerary == null)
             throw new InappropriateItineraryValueException(
@@ -142,20 +147,21 @@ public class GeneralUtility {
      *  Checks if the order parsed is valid.
      * 
      *  @param   order       ( the itinerary in question)
-     *  @return  Boolean     ( if the itinerary is valid it return true, false otherwise)
-     *  @throws  com.travelcompany.eshop.utility.InappropriateOrderValueException
+     *  @return  Boolean     ( if itinerary valid return true, false otherwise)
+     *  @throws  
+     *      com.travelcompany.eshop.utility.InappropriateOrderValueException
      */
-    public static boolean isValidOrder( Order order) 
-            throws InappropriateOrderValueException{
+    public static boolean isValidOrder( final Order order) 
+            throws InappropriateOrderValueException {
         
         if( order == null) 
             return false;    
         
-        if( order.getPaymentAmount().compareTo(BigDecimal.ZERO) == -1)
+        if( order.getPaymentAmount().compareTo( BigDecimal.ZERO) == -1)
             throw new InappropriateOrderValueException(
                     "Error, the orders payment amount is negative.");
             
-        if( order.getPaymentAmount().compareTo(BigDecimal.ZERO) == 0)
+        if( order.getPaymentAmount().compareTo( BigDecimal.ZERO) == 0)
             throw new InappropriateOrderValueException(
                     "Error, the orders payment amount is zero.");
         
@@ -169,26 +175,25 @@ public class GeneralUtility {
      *  @param  fileName                ( the file name of the data red)          
      *  @return List of String arrays.  ( the data returned in a list)
      */
-    public static List<String[]> readCsvFile( String fileName){
+    public static List<String[]> readCsvFile( final String fileName) {
         
         List<String[]> list = new ArrayList<>();
         BufferedReader br;
         
-        try{
+        try {
             
-            br = new BufferedReader(new FileReader(fileName));
+            br = new BufferedReader( new FileReader(fileName));
              
             String str;
 
-            while( ( str = br.readLine()) != null){
+            while( ( str = br.readLine()) != null) {
 
                 list.add( str.split(","));
             }
         
-        }catch( IOException ex){
+        }catch( IOException ex) {
             
-            System.out.println("Problem openning the file " 
-                    + fileName + "!");
+            System.out.println( "Problem openning the file " + fileName + "!");
             return null;
         }
         
@@ -207,33 +212,32 @@ public class GeneralUtility {
         FileWriter fos = null;
         String output = "";
         
-        try{
+        try {
 
             fos = new FileWriter( new File(fileName), false);
         }
-        catch( FileNotFoundException ex){
+        catch( FileNotFoundException ex) {
 
-            System.out.println("Problem finding the file " 
-                    + fileName + "!");
+            System.out.println( "Problem finding the file " + fileName + "!");
         }
-        catch( IOException ex){
+        catch( IOException ex) {
 
             System.out.println("Problem  opening the stream!");
         }
         
-        for( var c: list){
+        for( var c: list) {
 
             output += c.toString() + "\n";
         }  
 
-        try{
+        try {
 
             fos.write(output);
             fos.close();
         }
-        catch( IOException ex){
+        catch( IOException ex) {
 
-            System.out.println("Problem writing to the file " + fileName + "!");
+           System.out.println( "Problem writing to the file " + fileName + "!");
         }
     }
     
@@ -242,24 +246,26 @@ public class GeneralUtility {
      *  It creates a unique new id between [0, maxValue].
      * 
      *  @param  list        ( the list of the items to add a new id)
-     *  @param  maxValue    ( the max value to be included for the randomized algorithm)
+     *  @param  maxValue    ( max value to be included for randomized algorithm)
      *  @return The long id ( the new id to be returned)
+     *  @throws com.travelcompany.eshop.utility.MaxIdNumberException
      */
-    public static long createNewId( final List<? extends IdParser> list, final long maxValue){
+    public static long createNewId( final List<? extends IdParser> list, 
+            final long maxValue) throws MaxIdNumberException {
         
         Random rand = new Random();
         
         int count;
-        long newId = rand.nextLong(0,maxValue);
+        long newId = rand.nextLong( 0,maxValue);
         
         if( list == null)
                 return newId;
         
-        do{
+        do {
             
             count = 0;
             
-            for( var listValue : list){
+            for( var listValue : list) {
                 
                 if( listValue.getId() != newId)
                     count++;
@@ -268,8 +274,13 @@ public class GeneralUtility {
             if( count == list.size())
                 break;
             
-            newId = rand.nextLong(0,maxValue);
+            newId = rand.nextLong( 0,maxValue);
             
+            
+            if( count == maxValue)
+                throw new MaxIdNumberException(
+                        "Error, there is no space for new id names");
+        
         }while( true);
         
         return newId;
@@ -282,9 +293,10 @@ public class GeneralUtility {
      * @param id    ( the id to be checked)
      * @return      ( true if the id exists, false otherwise)
      */
-    public static boolean isValidId( List<? extends IdParser> list, long id){
+    public static boolean isValidId( final List<? extends IdParser> list, 
+            final long id) {
         
-        for( var item : list){
+        for( var item : list) {
             
             if( item.getId() == id)
                 return true;

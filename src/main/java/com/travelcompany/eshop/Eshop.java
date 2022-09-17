@@ -9,14 +9,14 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 
 /**
- *  This is the driver class of our project, here we start the application's logic.
+ *  The driver class of our project, here we start the application's logic.
  *  We have tests for our data within the .csv files.
  * 
  *  @author Grproth (gravelee)
  */
 public class Eshop {
     
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main( String[] args) throws FileNotFoundException {
         
         TravelCompanyService service = new TravelCompanyServiceImpl();
         
@@ -43,7 +43,7 @@ public class Eshop {
         service.displaySpecificItineraries( null, null);    // found 9
         
         // if you want to print the map that keep the info about the customers
-        //  you need to uncomment lines 444-445 from file 
+        //  you need to uncomment lines 459-460 from file 
         //  TravelCompanyServiceImpl.java
         //  This helps for checking purposes.
         
@@ -67,10 +67,10 @@ public class Eshop {
         service.displayAllCustomersWithoutOrders();             // found 4
         
         Itinerary itinerary = new Itinerary( 
-                GeneralUtility.createNewId( null, 1_000),"SKG","ATH","28/11/2023",
-                "16:45","Skypia Express",new BigDecimal("666.66"));
+            GeneralUtility.createNewId( null, 1_000),"SKG","ATH","28/11/2023",
+            "16:45","Skypia Express",new BigDecimal("666.66"));
         
-        service.createNewOrder( 10L, itinerary.getId(), PaymentType.CREDIT_CARD);  
+        service.createNewOrder(10L, itinerary.getId(), PaymentType.CREDIT_CARD);  
         // error customer/itinerrary not found
         service.createNewOrder( 9L, itinerary.getId(), PaymentType.CASH); 
         // error itinerrary not found
@@ -108,7 +108,7 @@ public class Eshop {
         service.displayCustomers( 4, new BigDecimal("1000.00"));    // found 1
         service.displayCustomers( 4, null);                         // found 1
         
-        service.displayAllCustomersWithoutOrders();             // found 3
+        service.displayAllCustomersWithoutOrders();                 // found 3
         
         
         //service.saveCustomersData();

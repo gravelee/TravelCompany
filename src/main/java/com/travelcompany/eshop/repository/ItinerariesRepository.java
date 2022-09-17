@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- *  This is the ItinerariesRepository interface, here we have all the methods that
+ *  This is the ItinerariesRepository interface, here we have all methods that
  *  a Itineraries Repository implementation needs to implement in order to have
  *  the appropriate logic.
  * 
@@ -13,13 +13,16 @@ import java.util.List;
  */
 public interface ItinerariesRepository {
     
-    boolean addItinerary( Itinerary itinerary);
-    boolean deleteItinerary( long itineraryId);
+    boolean addItinerary( final Itinerary itinerary);
+    boolean deleteItinerary( final long itineraryId);
     List<Itinerary> readItineraries();
-    Itinerary readItinerary( long itineraryId);
-    boolean updateItineraryDepDate( long itineraryId, String newDepDate);
-    boolean updateItineraryDepTime( long itineraryId, String newDepTime);
-    boolean updateItineraryAirline( long itineraryId, String newAirline);
-    boolean updateItineraryPrice( long itineraryId, BigDecimal newPrice);
-   
+    Itinerary readItinerary( final long itineraryId);
+    boolean updateItineraryDepDate( final long itineraryId, 
+            final String newDepDate);
+    boolean updateItineraryDepTime( final long itineraryId, 
+            final String newDepTime);
+    boolean updateItineraryAirline( final long itineraryId, 
+            final String newAirline);
+    boolean updateItineraryPrice( final long itineraryId, 
+            final BigDecimal newPrice);
 }

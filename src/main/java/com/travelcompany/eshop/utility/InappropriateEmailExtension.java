@@ -8,7 +8,7 @@ package com.travelcompany.eshop.utility;
  */
 public class InappropriateEmailExtension extends Exception {
     
-    public InappropriateEmailExtension( String errorMessage) {
+    public InappropriateEmailExtension( final String errorMessage) {
         
         super(errorMessage);
     }

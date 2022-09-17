@@ -10,7 +10,7 @@ import java.util.List;
  * 
  *  @author Grproth
  */
-public class OrdersRepositoryImpl implements OrdersRepository{
+public class OrdersRepositoryImpl implements OrdersRepository {
     
     private final List<Order> orders = new ArrayList<>();
     
@@ -22,9 +22,9 @@ public class OrdersRepositoryImpl implements OrdersRepository{
      *  @return  Boolean    ( true if the order has been added, false otherwise)
      */
     @Override
-    public boolean addOrder( Order newOrder){
+    public boolean addOrder( final Order newOrder) {
         
-        for( Order order : orders){
+        for( Order order : orders) {
             
             if( order.getId() == newOrder.getId())
                 return false;
@@ -39,11 +39,11 @@ public class OrdersRepositoryImpl implements OrdersRepository{
      *  Tries to delete an existing order from the list.
      * 
      *  @param  orderId     ( the id of the order in question)
-     *  @return Boolean     ( true if the order has been deleted, false otherwise)
+     *  @return Boolean     ( true if order has been deleted, false otherwise)
      */
     @Override
     public 
-    boolean deleteOrder( long orderId){
+    boolean deleteOrder( final long orderId) {
         
         Order order = readOrder(orderId);
         
@@ -61,7 +61,7 @@ public class OrdersRepositoryImpl implements OrdersRepository{
      *  @return orders   ( the whole list)
      */
     @Override
-    public List<Order> readOrders(){
+    public List<Order> readOrders() {
         
         return orders;
     }
@@ -75,9 +75,9 @@ public class OrdersRepositoryImpl implements OrdersRepository{
      *                          otherwise returns the order object)
      */
     @Override
-    public Order readOrder( long orderId){
+    public Order readOrder( final long orderId) {
         
-        for ( Order order : orders){
+        for ( Order order : orders) {
             
             if ( order.getId() == orderId)
                 return order;

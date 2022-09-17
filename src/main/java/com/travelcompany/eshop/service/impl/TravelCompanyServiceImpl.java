@@ -16,6 +16,7 @@ import com.travelcompany.eshop.utility.GeneralUtility;
 import com.travelcompany.eshop.utility.InappropriateCustomerValueException;
 import com.travelcompany.eshop.utility.InappropriateItineraryValueException;
 import com.travelcompany.eshop.utility.InappropriateOrderValueException;
+import com.travelcompany.eshop.utility.MaxIdNumberException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ import org.javatuples.Pair;
  * 
  *  @author Grproth
  */
-public class TravelCompanyServiceImpl implements TravelCompanyService{
+public class TravelCompanyServiceImpl implements TravelCompanyService {
     
     //  The file names within the project file of the .csv data files to be red.
     
@@ -57,10 +58,10 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
      *  @param  categoryType    ( the category type of the customer)
      *  @param  paymentType     ( the payment type of the order)
      *  @param  price           ( the original price of the itinerary)
-     *  @return BigDecimal      ( the processed price to be payed by the customer)
+     *  @return BigDecimal      ( the processed price to be payed by customer)
      */
     private BigDecimal discount( final CategoryType categoryType, 
-        final PaymentType paymentType, final BigDecimal price){
+        final PaymentType paymentType, final BigDecimal price) {
         
         double currentDiscount = 0.0;
         
@@ -80,11 +81,12 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
     
     
     /**
-     *  We load the data of a .csv file and then we write them into the customer list.
-     *  We also check if the customer to be added is valid based of business logic.
+     *  We load the data of a .csv file and then we write them into the customer 
+     *  list. We also check if the customer to be added is valid based of 
+     *  business logic.
      */
     @Override
-    public void loadCustomersData(){
+    public void loadCustomersData() {
         
         List<String[]> list = GeneralUtility.readCsvFile(CUSTOMERS_FILE_NAME);
         
@@ -93,7 +95,7 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
         String[] nationality;
         CategoryType categoryType;
 
-        for( String[] temp: list){
+        for( String[] temp: list) {
 
             cId = Long.parseLong(temp[0]);
             name = temp[1];
@@ -101,33 +103,35 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
             address = temp[3];
             nationality = temp[4].split(" ");
             categoryType = 
-                ("Business".equals(temp[5]))
+                ( "Business".equals(temp[5]))
                     ?CategoryType.BUSINESS
                     :CategoryType.INDIVIDUAL;
 
-            Customer customer = new Customer(cId,name,email,
+            Customer customer = new Customer( cId,name,email,
                     address,nationality,categoryType);
 
-            try{
+            try {
             
                 if( GeneralUtility.isValidCustomer(customer))
                     customersRepository.addCustomer(customer);
             }
-            catch( InappropriateCustomerValueException ex){
+            catch( InappropriateCustomerValueException ex) {
                 
                 System.out.println("\n");
-                Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(
+                        Level.SEVERE, null, ex);
             }
         }
     }
     
     
     /**
-     *  We load the data of a .csv file and then we write them into the itinerary list.
-     *  We also check if the itinerary to be added is valid based of business logic.
+     *  We load the data of a .csv file and then we write them into the 
+     *  itinerary list. We also check if the itinerary to be added is valid 
+     *  based of business logic.
      */
     @Override
-    public void loadItinerariesData(){
+    public void loadItinerariesData() {
         
         List<String[]> list = GeneralUtility.readCsvFile(ITINERARIES_FILE_NAME);
         
@@ -135,7 +139,7 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
         String depAC, desAC, airline, depDate, depTime;
         BigDecimal price;
 
-        for( String[] temp: list){
+        for( String[] temp: list) {
 
             iId = Long.parseLong(temp[0]);
             depAC = temp[1];
@@ -145,29 +149,30 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
             airline = temp[5];
             price = new BigDecimal(temp[6]);
 
-            Itinerary itinerary = new Itinerary(iId,depAC,desAC,
+            Itinerary itinerary = new Itinerary( iId,depAC,desAC,
                     depDate,depTime,airline,price);
 
-            try{
+            try {
             
                 if( GeneralUtility.isValidItinerary(itinerary))
                     itinerariesRepository.addItinerary(itinerary);
             }
-            catch( InappropriateItineraryValueException ex){
+            catch( InappropriateItineraryValueException ex) {
                 
                 System.out.println("\n");
-                Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log( 
+                        Level.SEVERE, null, ex);
             }
         }
     }
     
     
     /**
-     *  We load the data of a .csv file and then we write them into the order list.
+     *  Loads the data of a .csv file and we write them into the order list.
      *  We also check if the order to be added is valid based of business logic.
      */
     @Override
-    public void loadOrdersData(){
+    public void loadOrdersData() {
         
         List<String[]> list = GeneralUtility.readCsvFile(ORDERS_FILE_NAME);
         
@@ -175,35 +180,38 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
         PaymentType paymentType;
         BigDecimal paymentAmount;
 
-        for( String[] temp: list){
+        for( String[] temp: list) {
 
             oId = Long.parseLong(temp[0]);
             customerId = Long.parseLong(temp[1]);
             itineraryId = Long.parseLong(temp[2]);
             paymentType = 
-                    ("Cash".equals(temp[3]))
+                    ( "Cash".equals(temp[3]))
                     ?PaymentType.CASH
                     :PaymentType.CREDIT_CARD;
             paymentAmount = new BigDecimal(temp[4]);
 
-            if( !GeneralUtility.isValidId( customersRepository.readCustomers(), customerId))
+            if( !GeneralUtility.isValidId( 
+                    customersRepository.readCustomers(), customerId))
                 continue;
             
-            if( !GeneralUtility.isValidId( itinerariesRepository.readItineraries(), itineraryId))
+            if( !GeneralUtility.isValidId( 
+                    itinerariesRepository.readItineraries(), itineraryId))
                 continue;
             
-            Order order = new Order(oId,customerId,itineraryId,
+            Order order = new Order( oId,customerId,itineraryId,
                     paymentType,paymentAmount);
             
-            try{
+            try {
             
                 if( GeneralUtility.isValidOrder(order))
                     ordersRepository.addOrder(order);
             }
-            catch( InappropriateOrderValueException ex){
+            catch( InappropriateOrderValueException ex) {
                 
                 System.out.println("\n");
-                Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log( 
+                        Level.SEVERE, null, ex);
             }
         }
     }
@@ -214,7 +222,7 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
      *  The data does not need validity checking.
      */
     @Override
-    public void saveCustomersData(){
+    public void saveCustomersData() {
         
         GeneralUtility.writeCsvFile( 
             customersRepository.readCustomers(), CUSTOMERS_FILE_NAME);
@@ -226,7 +234,7 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
      *  The data does not need validity checking.
      */
     @Override
-    public void saveItinerariesData(){
+    public void saveItinerariesData() {
         
         GeneralUtility.writeCsvFile( 
             itinerariesRepository.readItineraries(), ITINERARIES_FILE_NAME);
@@ -238,7 +246,7 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
      *  The data does not need validity checking.
      */
     @Override
-    public void saveOrdersData(){
+    public void saveOrdersData() {
         
         GeneralUtility.writeCsvFile( 
             ordersRepository.readOrders(), ORDERS_FILE_NAME);
@@ -257,8 +265,8 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
      *                          to the list, false otherwise)
      */
     @Override
-    public boolean createNewOrder( long customerId, 
-            long itineraryId, PaymentType paymentType){
+    public boolean createNewOrder( final long customerId, 
+            final long itineraryId, final PaymentType paymentType) {
         
         Customer customer = customersRepository.readCustomer(customerId);
         Itinerary itinerary = itinerariesRepository.readItinerary(itineraryId);
@@ -270,7 +278,8 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
         } catch ( InappropriateCustomerValueException ex) {
             
             System.out.println("\n");
-            Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(
+                    Level.SEVERE, null, ex);
             return false;
         }
         
@@ -281,7 +290,8 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
         } catch ( InappropriateItineraryValueException ex) {
             
             System.out.println("\n");
-            Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log( 
+                    Level.SEVERE, null, ex);
             return false;
         }
         
@@ -289,9 +299,17 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
         
         // could put Long.MAX_VALUE for the second arg but for the sake of
         // our application I will put a smaller number (100) to look better.
-        newId = GeneralUtility.createNewId( 
+        try {
+        
+            newId = GeneralUtility.createNewId( 
                 ordersRepository.readOrders(), 100); 
         
+        }catch( MaxIdNumberException ex){
+            
+            Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log( 
+                    Level.SEVERE, null, ex);
+            return false;
+        }
         
         BigDecimal discountedPrice = discount( customer.getCategory(), 
             paymentType, itinerary.getPrice());
@@ -301,7 +319,7 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
         
         try {
             
-            if( GeneralUtility.isValidOrder(newOrder)){
+            if( GeneralUtility.isValidOrder(newOrder)) {
                 
                 ordersRepository.addOrder(newOrder);
                 return true;
@@ -310,7 +328,8 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
         } catch (InappropriateOrderValueException ex) {
             
             System.out.println("\n");
-            Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger( TravelCompanyServiceImpl.class.getName()).log(
+                    Level.SEVERE, null, ex);
         }
         
         return false;
@@ -321,12 +340,12 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
      *  Displays all the orders from the list.
      */
     @Override
-    public void displayAllOrdersWithCosts(){
+    public void displayAllOrdersWithCosts() {
         
-        System.out.println(Order.header());
+        System.out.println( Order.header());
         
         for( Order order : ordersRepository.readOrders())
-            System.out.println(order.toString());
+            System.out.println( order.toString());
     }
     
     
@@ -337,8 +356,8 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
      *  null it participates and if both of them are not null they participate
      *  both.
      * 
-     *  The algorithm filters all the data based on the first string ( if not null)
-     *  and then filters the remaining data for the second string ( if not null).
+     *  The algorithm filters all the data based on first string ( if not null)
+     *  and then filters the remaining data for second string ( if not null).
      * 
      *  Basically we check if the itineraries have the specific departure and 
      *  adds the itineraries to the filter list itineraries. Then we check if 
@@ -349,13 +368,14 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
      *  @param destination   ( the second string to be checked)
      */
     @Override
-    public void displaySpecificItineraries( String departure, String destination){  // either of these or both can be null.
+    public void displaySpecificItineraries( final String departure, 
+            final String destination) {  // either of these or both can be null.
         
-        System.out.println(Itinerary.header());
+        System.out.println( Itinerary.header());
         
         List<Itinerary> itineraries = new ArrayList<>();
         
-        if( departure != null){
+        if( departure != null) {
         
             for( Itinerary itinerary : itinerariesRepository.readItineraries()){
 
@@ -363,32 +383,32 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
                     itineraries.add(itinerary);
             }
             
-            if( destination != null){
+            if( destination != null) {
                 
-                for( Itinerary itinerary : itineraries){
+                for( Itinerary itinerary : itineraries) {
 
                     if( itinerary.getDesAC().equals(destination))
-                        System.out.println(itinerary.toString());
+                        System.out.println( itinerary.toString());
                 }
             }
-            else{
+            else {
              
                 for( Itinerary itinerary : itineraries)
-                    System.out.println(itinerary.toString());
+                    System.out.println( itinerary.toString());
             }
         }
-        else if( destination != null){
+        else if( destination != null) {
             
             for( Itinerary itinerary : itinerariesRepository.readItineraries()){
 
                 if( itinerary.getDesAC().equals(destination))
-                    System.out.println(itinerary.toString());
+                    System.out.println( itinerary.toString());
             }
         }
-        else{   // prints everything cause we did not add restrictions.
+        else {   // prints everything cause we did not add restrictions.
             
             for( Itinerary itinerary : itinerariesRepository.readItineraries())
-                System.out.println(itinerary.toString());
+                System.out.println( itinerary.toString());
         }
     }
     
@@ -396,9 +416,9 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
     /**
      *  Displays all customers that pass the filter.
      *  Specifically if the fromTicketNumber number is zero or fromCost big 
-     *  decimal is zero or null they do not participate to the filtering algorithm. 
-     *  If one of them is not zero or null it participates and if both of them are 
-     *  not zeros or null they participate both.
+     *  decimal is zero or null they do not participate to the filtering 
+     *  algorithm. If one of them is not zero or null it participates and if 
+     *  both of them are not zeros or null they participate both.
      * 
      *  The algorithm filters all the data based on the integer ( if not zero)
      *  and then filters the remaining data based on the big decimal 
@@ -408,68 +428,72 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
      *  We also use lambda expressions to do the job.
      * 
      *  Basically we check if the customer has number of tickets equals or more
-     *  than the fromTicketNumber int and we also check if the customer has equals 
-     *  or more than the fromCost number of the sum of the costs of the specific 
-     *  customers orders. In the end we prints the appropriate data.
+     *  than the fromTicketNumber int and we also check if the customer has 
+     *  equals or more than the fromCost number of the sum of the costs of the 
+     *  specific customers orders. In the end we prints the appropriate data.
      * 
      *  @param fromTicketNumber 
      *  @param fromCost         
      */
     @Override
-    public void displayCustomers( int fromTicketNumber, BigDecimal fromCost){   // the numbers can be 0 (0.0) or null for BigDecimal.
+    public void displayCustomers( final int fromTicketNumber, 
+            final BigDecimal fromCost) {   
+            // the numbers can be 0 (0.0) or null for BigDecimal.
         
-        Map<Long,Pair<Integer,BigDecimal>> ordersPerCustomerIdWithTotalAmount = new HashMap<>();
+        Map<Long,Pair<Integer,BigDecimal>> ordersPerCustomerIdWithTotalAmount = 
+                new HashMap<>();
         
-        for( Order order : ordersRepository.readOrders()){
+        for( Order order : ordersRepository.readOrders()) {
 
             long customerId = order.getCustomerId();
 
-            if( !ordersPerCustomerIdWithTotalAmount.containsKey( customerId)){
+            if( !ordersPerCustomerIdWithTotalAmount.containsKey(customerId)) {
 
                 ordersPerCustomerIdWithTotalAmount.put( 
-                        customerId, new Pair(1, order.getPaymentAmount()));
+                        customerId, new Pair( 1, order.getPaymentAmount()));
             }
-            else{
+            else {
 
                 Pair<Integer,BigDecimal> pair = new Pair(
-                    ordersPerCustomerIdWithTotalAmount.get(customerId).getValue0() + 1,
+                    ordersPerCustomerIdWithTotalAmount.get(customerId).
+                            getValue0() + 1,
                     ordersPerCustomerIdWithTotalAmount.get(
-                        customerId).getValue1().add(order.getPaymentAmount()));
+                        customerId).getValue1().add( order.getPaymentAmount()));
 
                 ordersPerCustomerIdWithTotalAmount.remove(customerId);
-                ordersPerCustomerIdWithTotalAmount.put(customerId, pair);
+                ordersPerCustomerIdWithTotalAmount.put( customerId, pair);
             }
         }
         
 //        System.out.println( "\n" + ordersPerCustomerIdWithTotalAmount.size() 
 //              + "\n" + ordersPerCustomerIdWithTotalAmount.toString() + "\n");
         
-        if( fromTicketNumber != 0){
+        if( fromTicketNumber != 0) {
         
-            if( fromCost != null && fromCost.compareTo( BigDecimal.ZERO) == 1){
+            if( fromCost != null && fromCost.compareTo( BigDecimal.ZERO) == 1) {
                 
                 ordersPerCustomerIdWithTotalAmount.forEach( ( key, pair) -> { 
                 
                 if( ( pair.getValue0() >= fromTicketNumber) && 
                         ( pair.getValue1().compareTo(fromCost) == 1
-                            || pair.getValue1().compareTo(fromCost) == 0)){
+                            || pair.getValue1().compareTo(fromCost) == 0)) {
                     
                     Customer customer = customersRepository.readCustomer(key);
                     
                     if( customer != null)
-                        System.out.println(customer.toString());
+                        System.out.println( customer.toString());
                 }});
             }
-            else{
+            else {
              
                 ordersPerCustomerIdWithTotalAmount.forEach( ( key, pair) -> { 
                 
-                if( pair.getValue0() >= fromTicketNumber){
+                if( pair.getValue0() >= fromTicketNumber) {
                     
                     Customer customer = customersRepository.readCustomer(key);
                     
                     if( customer != null)
-                        System.out.println(customer.toString());
+                        System.out.println( customer.toString());
                 }});
             }
         }
@@ -478,18 +502,18 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
             ordersPerCustomerIdWithTotalAmount.forEach( ( key, pair) -> { 
                 
             if( ( pair.getValue1().compareTo(fromCost) == 1
-                || pair.getValue1().compareTo(fromCost) == 0)){
+                || pair.getValue1().compareTo(fromCost) == 0)) {
 
                 Customer customer = customersRepository.readCustomer(key);
                     
                 if( customer != null)
-                    System.out.println(customer.toString());
+                    System.out.println( customer.toString());
             }});
         }
-        else{
+        else {
             
             for( Customer customer : customersRepository.readCustomers())
-                System.out.println(customer.toString());
+                System.out.println( customer.toString());
         }
     }
     
@@ -499,22 +523,22 @@ public class TravelCompanyServiceImpl implements TravelCompanyService{
      *  print them.
      */
     @Override
-    public void displayAllCustomersWithoutOrders(){
+    public void displayAllCustomersWithoutOrders() {
         
-        System.out.println(Customer.header());
+        System.out.println( Customer.header());
         
-        for( Customer customer : customersRepository.readCustomers()){
+        for( Customer customer : customersRepository.readCustomers()) {
             
             boolean hasOrdered = false;
             
-            for( Order order : ordersRepository.readOrders()){
+            for( Order order : ordersRepository.readOrders()) {
                 
                 if( customer.getId() == order.getCustomerId())
                     hasOrdered = true;
             }
             
             if( !hasOrdered)
-                System.out.println(customer.toString());
+                System.out.println( customer.toString());
         }
     }
 }

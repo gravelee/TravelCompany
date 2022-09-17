@@ -21,12 +21,12 @@ public class CustomersRepositoryImpl implements CustomersRepository {
      *  Tries to add a new customer to the list.
      * 
      *  @param   newCustomer ( the customer to be added)
-     *  @return  Boolean     ( true if the customer has been added, false otherwise)
+     *  @return  Boolean     ( true if customer has been added, false otherwise)
      */
     @Override
-    public boolean addCustomer( Customer newCustomer){
+    public boolean addCustomer( final Customer newCustomer) {
         
-        for( Customer customer : customers){
+        for( Customer customer : customers) {
             
             if( customer.getId() == newCustomer.getId())
                 return false;
@@ -41,10 +41,10 @@ public class CustomersRepositoryImpl implements CustomersRepository {
      *  Tries to delete an existing customer from the list.
      * 
      *  @param customerId   ( the id of the customer in question)
-     *  @return Boolean     ( true if the customer has been deleted, false otherwise)
+     *  @return Boolean     ( true if customer has been deleted false otherwise)
      */
     @Override
-    public boolean deleteCustomer( long customerId){
+    public boolean deleteCustomer( final long customerId) {
         
         Customer customer = readCustomer(customerId);
         
@@ -62,7 +62,7 @@ public class CustomersRepositoryImpl implements CustomersRepository {
      *  @return customers   ( the whole list)
      */
     @Override
-    public List<Customer> readCustomers(){
+    public List<Customer> readCustomers() {
         
         return customers;
     }
@@ -76,9 +76,9 @@ public class CustomersRepositoryImpl implements CustomersRepository {
      *                          otherwise returns the customer object)
      */
     @Override
-    public Customer readCustomer( long customerId){
+    public Customer readCustomer( final long customerId) {
 
-        for ( Customer customer : customers){
+        for ( Customer customer : customers) {
             
             if ( customer.getId() == customerId)
                 return customer;
@@ -96,7 +96,8 @@ public class CustomersRepositoryImpl implements CustomersRepository {
      *  @return Boolean     ( true if everything went well, false otherwise)
      */
     @Override
-    public boolean updateCustomerName( long customerId, String newName){
+    public boolean updateCustomerName( final long customerId, 
+            final String newName) {
         
         Customer customer = readCustomer(customerId);
         
@@ -116,14 +117,15 @@ public class CustomersRepositoryImpl implements CustomersRepository {
      *  @return Boolean     ( true if everything went well, false otherwise)
      */
     @Override
-    public boolean updateCustomerEmail( long customerId, String newEmail){
+    public boolean updateCustomerEmail( final long customerId, 
+            final String newEmail) {
         
         Customer theCustomer = readCustomer(customerId);
         
         if( theCustomer == null) 
             return false;
         
-        for ( Customer customer : customers){
+        for ( Customer customer : customers) {
             
             if ( customer.getEmail() != null 
                 && customer.getEmail().equals(newEmail))
@@ -143,7 +145,8 @@ public class CustomersRepositoryImpl implements CustomersRepository {
      *  @return Boolean     ( true if everything went well, false otherwise)
      */
     @Override
-    public boolean updateCustomerAddress( long customerId, String newAddress){
+    public boolean updateCustomerAddress( final long customerId, 
+            final String newAddress) {
         
         Customer theCustomer = readCustomer(customerId);
         
@@ -166,7 +169,8 @@ public class CustomersRepositoryImpl implements CustomersRepository {
      *  @return Boolean         ( true if everything went well, false otherwise)
      */
     @Override
-    public boolean updateCustomerNationality( long customerId, String [] newNationality){
+    public boolean updateCustomerNationality( final long customerId, 
+            final String [] newNationality) {
         
         Customer theCustomer = readCustomer(customerId);
         
@@ -187,7 +191,7 @@ public class CustomersRepositoryImpl implements CustomersRepository {
      */
     @Override
     public boolean updateCustomerCategoryType( 
-            long customerId, CategoryType newCategoryType){
+            final long customerId, final CategoryType newCategoryType) {
         
         Customer theCustomer = readCustomer(customerId);
         

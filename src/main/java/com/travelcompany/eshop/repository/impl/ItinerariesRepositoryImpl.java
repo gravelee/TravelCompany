@@ -11,7 +11,7 @@ import java.util.List;
  * 
  *  @author Grproth
  */
-public class ItinerariesRepositoryImpl implements ItinerariesRepository{
+public class ItinerariesRepositoryImpl implements ItinerariesRepository {
     
     private final List<Itinerary> itineraries = new ArrayList<>();
     
@@ -19,13 +19,13 @@ public class ItinerariesRepositoryImpl implements ItinerariesRepository{
     /**
      *  Tries to add a new itinerary to the list.
      * 
-     *  @param  newItinerary    ( the itinerary to be added)
-     *  @return Boolean         ( true if the itinerary has been added, false otherwise)
+     *  @param  newItinerary( the itinerary to be added)
+     *  @return Boolean     ( true if itinerary has been added, false otherwise)
      */
     @Override
-    public boolean addItinerary( Itinerary newItinerary){
+    public boolean addItinerary( final Itinerary newItinerary) {
         
-        for( Itinerary itinerary : itineraries){
+        for( Itinerary itinerary : itineraries) {
             
             if( itinerary.getId() == newItinerary.getId())
                 return false;
@@ -39,11 +39,11 @@ public class ItinerariesRepositoryImpl implements ItinerariesRepository{
     /**
      *  Tries to delete an existing itinerary from the list.
      * 
-     *  @param  itineraryId ( the id of the itinerary in question)
-     *  @return Boolean     ( true if the itinerary has been deleted, false otherwise)
+     *  @param  itineraryId( the id of the itinerary in question)
+     *  @return Boolean    ( true if itinerary has been deleted false otherwise)
      */
     @Override
-    public boolean deleteItinerary( long itineraryId){
+    public boolean deleteItinerary( final long itineraryId) {
         
         Itinerary itinerary = readItinerary(itineraryId);
         
@@ -61,7 +61,7 @@ public class ItinerariesRepositoryImpl implements ItinerariesRepository{
      *  @return itineraries   ( the whole list)
      */
     @Override
-    public List<Itinerary> readItineraries(){
+    public List<Itinerary> readItineraries() {
         
         return itineraries;
     }
@@ -75,9 +75,9 @@ public class ItinerariesRepositoryImpl implements ItinerariesRepository{
      *                          otherwise returns the itinerary object)
      */
     @Override
-    public Itinerary readItinerary( long itineraryId){
+    public Itinerary readItinerary( final long itineraryId) {
         
-        for ( Itinerary itinerary : itineraries){
+        for ( Itinerary itinerary : itineraries) {
             
             if ( itinerary.getId() == itineraryId)
                 return itinerary;
@@ -95,7 +95,8 @@ public class ItinerariesRepositoryImpl implements ItinerariesRepository{
      *  @return Boolean     ( true if everything went well, false otherwise)
      */
     @Override
-    public boolean updateItineraryDepDate( long itineraryId, String newDepDate){
+    public boolean updateItineraryDepDate( final long itineraryId, 
+            final String newDepDate) {
         
         Itinerary itinerary = readItinerary(itineraryId);
         
@@ -115,7 +116,8 @@ public class ItinerariesRepositoryImpl implements ItinerariesRepository{
      *  @return Boolean     ( true if everything went well, false otherwise)
      */
     @Override
-    public boolean updateItineraryDepTime( long itineraryId, String newDepTime){
+    public boolean updateItineraryDepTime( final long itineraryId, 
+            final String newDepTime) {
         
         Itinerary itinerary = readItinerary(itineraryId);
         
@@ -135,7 +137,8 @@ public class ItinerariesRepositoryImpl implements ItinerariesRepository{
      *  @return Boolean         ( true if everything went well, false otherwise)
      */
     @Override
-    public boolean updateItineraryAirline( long itineraryId, String newAirline){
+    public boolean updateItineraryAirline( final long itineraryId, 
+            final String newAirline) {
         
         Itinerary itinerary = readItinerary(itineraryId);
         
@@ -155,7 +158,8 @@ public class ItinerariesRepositoryImpl implements ItinerariesRepository{
      *  @return Boolean         ( true if everything went well, false otherwise)
      */
     @Override
-    public boolean updateItineraryPrice( long itineraryId, BigDecimal newPrice){
+    public boolean updateItineraryPrice( final long itineraryId, 
+            final BigDecimal newPrice) {
         
         Itinerary itinerary = readItinerary(itineraryId);
         

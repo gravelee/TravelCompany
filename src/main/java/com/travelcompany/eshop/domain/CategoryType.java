@@ -12,12 +12,14 @@ public enum CategoryType {
     
     private final String name;
     
-    private CategoryType(String name){
+    private CategoryType(String name) {
+        
         this.name = name;
     }
     
     @Override
-    public String toString(){
+    public final String toString() {
+        
         return name;
     }
 }

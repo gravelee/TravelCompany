@@ -13,14 +13,16 @@ import java.util.List;
  */
 public interface CustomersRepository {
     
-    boolean addCustomer ( Customer customer);
-    boolean deleteCustomer( long customerId);
+    boolean addCustomer ( final Customer customer);
+    boolean deleteCustomer( final long customerId);
     List<Customer> readCustomers();
-    Customer readCustomer( long customerId);
-    boolean updateCustomerName( long customerId, String newName);
-    boolean updateCustomerEmail( long customerId, String newEmail);
-    boolean updateCustomerAddress( long customerId, String newAddress);
-    boolean updateCustomerNationality( long customerId, String [] newNationality);
-    boolean updateCustomerCategoryType( long customerId, CategoryType newCategoryType);
-    
+    Customer readCustomer( final long customerId);
+    boolean updateCustomerName( final long customerId, final String newName);
+    boolean updateCustomerEmail( final long customerId, final String newEmail);
+    boolean updateCustomerAddress( final long customerId, 
+            final String newAddress);
+    boolean updateCustomerNationality( long customerId, 
+            final String [] newNationality);
+    boolean updateCustomerCategoryType( long customerId, 
+            final CategoryType newCategoryType);
 }

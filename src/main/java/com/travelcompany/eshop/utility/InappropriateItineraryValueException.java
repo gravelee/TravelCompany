@@ -9,7 +9,7 @@ package com.travelcompany.eshop.utility;
  */
 public class InappropriateItineraryValueException extends Exception {
 
-    public InappropriateItineraryValueException( String errorMessage) {
+    public InappropriateItineraryValueException( final String errorMessage) {
         
         super(errorMessage);
     }

@@ -7,9 +7,9 @@ package com.travelcompany.eshop.utility;
  * 
  *  @author Grproth
  */
-public class InappropriateCustomerValueException extends Exception{
+public class InappropriateCustomerValueException extends Exception {
     
-    public InappropriateCustomerValueException( String errorMessage) {
+    public InappropriateCustomerValueException( final String errorMessage) {
         
         super(errorMessage);
     }
