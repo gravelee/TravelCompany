@@ -69,27 +69,26 @@ public class Eshop {
         
         service.displayAllCustomersWithoutOrders();             // found 4
         
-        Itinerary itinerary = null;
+        Itinerary itinerary;
         
         try {
-            
+
             itinerary = new Itinerary( 
                 GeneralUtility.createNewId( null, 1_000),
                     "SKG","ATH","28/11/2023","16:45","Skypia Express",
                     new BigDecimal("666.66"));
-            
+
             service.createNewOrder(10L, itinerary.getId(), PaymentType.CREDIT_CARD);  
             // error customer/itinerrary not found
             service.createNewOrder( 9L, itinerary.getId(), PaymentType.CASH); 
             // error itinerrary not found
         }
         catch( MaxIdNumberException ex){
-        
+
             System.out.println("\n");
             Logger.getLogger( Eshop.class.getName()).log(
                     Level.SEVERE, null, ex);
         }
-        
         
         service.createNewOrder( 7L, 10L, PaymentType.CREDIT_CARD);
         // error itinerrary not found
