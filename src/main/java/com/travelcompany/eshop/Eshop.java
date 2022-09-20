@@ -5,8 +5,11 @@ import com.travelcompany.eshop.domain.PaymentType;
 import com.travelcompany.eshop.service.TravelCompanyService;
 import com.travelcompany.eshop.service.impl.TravelCompanyServiceImpl;
 import com.travelcompany.eshop.utility.GeneralUtility;
+import com.travelcompany.eshop.utility.MaxIdNumberException;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *  The driver class of our project, here we start the application's logic.
@@ -66,14 +69,28 @@ public class Eshop {
         
         service.displayAllCustomersWithoutOrders();             // found 4
         
-        Itinerary itinerary = new Itinerary( 
-            GeneralUtility.createNewId( null, 1_000),"SKG","ATH","28/11/2023",
-            "16:45","Skypia Express",new BigDecimal("666.66"));
+        Itinerary itinerary = null;
         
-        service.createNewOrder(10L, itinerary.getId(), PaymentType.CREDIT_CARD);  
-        // error customer/itinerrary not found
-        service.createNewOrder( 9L, itinerary.getId(), PaymentType.CASH); 
-        // error itinerrary not found
+        try {
+            
+            itinerary = new Itinerary( 
+                GeneralUtility.createNewId( null, 1_000),
+                    "SKG","ATH","28/11/2023","16:45","Skypia Express",
+                    new BigDecimal("666.66"));
+            
+            service.createNewOrder(10L, itinerary.getId(), PaymentType.CREDIT_CARD);  
+            // error customer/itinerrary not found
+            service.createNewOrder( 9L, itinerary.getId(), PaymentType.CASH); 
+            // error itinerrary not found
+        }
+        catch( MaxIdNumberException ex){
+        
+            System.out.println("\n");
+            Logger.getLogger( Eshop.class.getName()).log(
+                    Level.SEVERE, null, ex);
+        }
+        
+        
         service.createNewOrder( 7L, 10L, PaymentType.CREDIT_CARD);
         // error itinerrary not found
         service.createNewOrder( 4L, 1L, PaymentType.CASH);
