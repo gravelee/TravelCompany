@@ -454,14 +454,15 @@ public class TravelCompanyServiceImpl implements TravelCompanyService {
             }
             else {
 
-                Pair<Integer,BigDecimal> pair = new Pair(
-                    ordersPerCustomerIdWithTotalAmount.get(customerId).
-                            getValue0() + 1,
-                    ordersPerCustomerIdWithTotalAmount.get(
-                        customerId).getValue1().add( order.getPaymentAmount()));
+                Pair<Integer,BigDecimal> oldPair =
+                    ordersPerCustomerIdWithTotalAmount.get(customerId);
+                
+                Pair<Integer,BigDecimal> newPair = 
+                    new Pair( oldPair.getValue0() + 1,
+                        oldPair.getValue1().add( order.getPaymentAmount()));
 
-                ordersPerCustomerIdWithTotalAmount.remove(customerId);
-                ordersPerCustomerIdWithTotalAmount.put( customerId, pair);
+                ordersPerCustomerIdWithTotalAmount.replace( customerId,
+                    oldPair, newPair);
             }
         }
         
